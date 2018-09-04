@@ -7,6 +7,7 @@ use Lloricode\LaravelUploader\Models\Uploader as Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Lloricode\LaravelUploader\Contract\UploaderContract;
+use Exception;
 
 trait UploaderTrait
 {
@@ -36,7 +37,7 @@ trait UploaderTrait
     {
         $modelRules = $this->uploaderRules();
 
-        throw_if($modelRules->maxSize < $uploadedFile->getClientSize(), 'Max file size allowed is ' . formatBytesUnits($modelRules->maxSize));
+        throw_if($modelRules->maxSize < $uploadedFile->getClientSize(), Exception::class, 'Max file size allowed is ' . formatBytesUnits($modelRules->maxSize));
 
 
         $pathToSave = Storage::disk($modelRules->disk)->put($this->_storagePath($this), $uploadedFile);
@@ -60,7 +61,7 @@ trait UploaderTrait
         $modelClassArray = explode('\\', $modelclass);
 
         // TODO:
-        $pathConfig = '';//config('uploaders.folder_path');
+        $pathConfig = ''; //config('uploaders.folder_path');
 
         return Model::PATH_FOLDER . '/' . $pathConfig . $modelClassArray[count($modelClassArray)-1] . '/' . md5($model->id);
     }
