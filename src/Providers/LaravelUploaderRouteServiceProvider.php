@@ -4,7 +4,7 @@ namespace Lloricode\LaravelUploader\Providers;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Route;
 
-class LaravelUploaderServiceProvider extends RouteServiceProvider
+class LaravelUploaderRouteServiceProvider extends RouteServiceProvider
 {
     protected $namespace ='Lloricode\LaravelUploader\Http\Controllers';
 

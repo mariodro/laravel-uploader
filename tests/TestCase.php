@@ -89,7 +89,7 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-            "Lloricode\\LaravelUploader\\Providers\\LaravelUploaderServiceProvider",
+            "Lloricode\\LaravelUploader\\Providers\\LaravelUploaderRouteServiceProvider",
         ];
     }
 }
