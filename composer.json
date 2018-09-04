@@ -45,8 +45,6 @@
             "./vendor/bin/php-cs-fixer fix src/  --show-progress=estimating",
             "./vendor/bin/php-cs-fixer fix tests/  --show-progress=estimating"
         ]
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
     
 }
