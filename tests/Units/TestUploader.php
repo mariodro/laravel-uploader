@@ -32,5 +32,16 @@ class TestUploader extends TestCase
             'content_type' => 'application/pdf',
             'user_id' => $this->user->id,
         ]);
+
+
+        $fakeFile = UploadedFile::fake()->create('my_file_22.pdf')->size(456);
+
+        $uploader =  $this->testModel
+            ->uploadFile($fakeFile, 'sample');
+
+
+        $uploadedFiles =  $this->testModel->getUploadedFiles();
+       
+        $this->assertCount(2, $uploadedFiles);
     }
 }

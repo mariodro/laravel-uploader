@@ -8,6 +8,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Lloricode\LaravelUploader\Contract\UploaderContract;
 use Exception;
+use Illuminate\Support\Collection;
 
 trait UploaderTrait
 {
@@ -33,7 +34,27 @@ trait UploaderTrait
         parent::delete();
     }
 
-    public function uploadFile(UploadedFile $uploadedFile, $label = null)
+    public function getUploadedFiles() :Collection
+    {
+        $return = collect([]);
+        foreach ($this->uploaders as $uploader) {
+            $return->push((object)[
+                'client_original_name' => $uploader->client_original_name,
+                'label' => $uploader->label,
+                'extension' => $uploader->extension,
+                'disk' => $uploader->disk,
+                'content_type' => $uploader->content_type,
+                'download_link' => route('uploader.download', $uploader),
+                'readable_size' => formatBytesUnits($uploader->bytes),
+
+                'created_at' => $uploader->created_at->format('F d, Y g:ia'),
+                'readable_created_at' => $uploader->created_at->diffForHumans(),
+            ]);
+        }
+        return $return;
+    }
+
+    public function uploadFile(UploadedFile $uploadedFile, $label = null) :Model
     {
         $modelRules = $this->uploaderRules();
 
