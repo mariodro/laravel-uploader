@@ -35,6 +35,7 @@
     "extra": {
         "laravel": {
             "providers": [
+                "Lloricode\\LaravelUploader\\Providers\\LaravelUploaderServiceProvider",
                 "Lloricode\\LaravelUploader\\Providers\\LaravelUploaderRouteServiceProvider"
             ]
         }
