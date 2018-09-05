@@ -90,6 +90,7 @@ class TestCase extends Orchestra
     {
         return [
             "Lloricode\\LaravelUploader\\Providers\\LaravelUploaderServiceProvider",
+            "Lloricode\\LaravelUploader\\Providers\\LaravelUploaderRouteServiceProvider",
         ];
     }
 }

@@ -3,12 +3,12 @@
 namespace Lloricode\LaravelUploader\Traits;
 
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Lloricode\LaravelUploader\Models\Uploader as Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Lloricode\LaravelUploader\Contract\UploaderContract;
 use Exception;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Config;
 
 trait UploaderTrait
 {
@@ -20,7 +20,7 @@ trait UploaderTrait
      */
     public function uploaders() :MorphMany
     {
-        return $this->morphMany(Model::class, 'uploaderable');
+        return $this->morphMany(Config::get('uploader.implementation', \Lloricode\LaravelUploader\Models\Uploader::class), 'uploaderable');
     }
 
     public function delete()
@@ -39,12 +39,16 @@ trait UploaderTrait
         $return = collect([]);
         foreach ($this->uploaders as $uploader) {
             $return->push((object)[
+                'path' => $uploader->path,
                 'client_original_name' => $uploader->client_original_name,
                 'label' => $uploader->label,
                 'extension' => $uploader->extension,
                 'disk' => $uploader->disk,
                 'content_type' => $uploader->content_type,
-                'download_link' => route('uploader.download', $uploader),
+                'download_link' => (object)[
+                    'web' => route('lloricode.web.uploader.download', $uploader),
+                    'api' => route('lloricode.api.uploader.download', $uploader),
+                ],
                 'readable_size' => formatBytesUnits($uploader->bytes),
 
                 'created_at' => $uploader->created_at->format('F d, Y g:ia'),
@@ -54,7 +58,7 @@ trait UploaderTrait
         return $return;
     }
 
-    public function uploadFile(UploadedFile $uploadedFile, $label = null) :Model
+    public function uploadFile(UploadedFile $uploadedFile, $label = null) //:Model
     {
         $modelRules = $this->uploaderRules();
 
@@ -84,6 +88,6 @@ trait UploaderTrait
         // TODO:
         $pathConfig = ''; //config('uploaders.folder_path');
 
-        return Model::PATH_FOLDER . '/' . $pathConfig . $modelClassArray[count($modelClassArray)-1] . '/' . md5($model->id);
+        return Config::get('uploader.implementation', \Lloricode\LaravelUploader\Models\Uploader::class)::PATH_FOLDER . '/' . $pathConfig . $modelClassArray[count($modelClassArray)-1] . '/' . md5($model->id);
     }
 }
