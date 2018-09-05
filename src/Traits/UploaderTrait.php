@@ -39,6 +39,7 @@ trait UploaderTrait
         $return = collect([]);
         foreach ($this->uploaders as $uploader) {
             $return->push((object)[
+                'path' => $uploader->path,
                 'client_original_name' => $uploader->client_original_name,
                 'label' => $uploader->label,
                 'extension' => $uploader->extension,
