@@ -50,8 +50,7 @@ class TestUploader extends TestCase
         $this->assertEquals('application/pdf', $uploadedFiles[0]->content_type);
         $this->assertEquals('http://localhost/uploaders/1', $uploadedFiles[0]->download_link);
 
-        // TODO:
-        // $this->get($uploadedFiles[0]->download_link)->dump()
-        //     ->assertOk();
+        $this->get($uploadedFiles[0]->download_link)
+            ->assertOk();
     }
 }
