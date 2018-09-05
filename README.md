@@ -1,6 +1,5 @@
 # Laravel Uploader
-[![Build Status](https://travis-ci.org/lloricode/laravel-uploader.svg?branch=develop)](https://travis-ci.org/lloricode/laravel-uploader)
-
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/lloricode/laravel-uploader.svg)](https://packagist.org/packages/lloricode/laravel-uploader) [![Build Status](https://travis-ci.org/lloricode/laravel-uploader.svg?branch=master)](https://travis-ci.org/lloricode/laravel-uploader) [![Total Downloads](https://img.shields.io/packagist/dt/lloricode/laravel-uploader.svg)](https://packagist.org/packages/lloricode/laravel-uploader)
 ## Install via [composer](https://getcomposer.org/).
 ```
 composer require lloricode/laravel-uploader
