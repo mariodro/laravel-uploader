@@ -15,14 +15,10 @@ class TestUploader extends TestCase
         $this->actingAs($this->user);
     }
 
-    private function _getTestFileUploded($name = 'my_file.pdf')
-    {
-        return new UploadedFile(__DIR__ . '/../files/test.pdf', $name);
-    }
 
     public function testAllDefault()
     {
-        $fakeFile = $this->_getTestFileUploded();
+        $fakeFile = UploadedFile::fake()->create('my_file.pdf')->size(123);
         $ct1 = $fakeFile->getClientMimeType();
 
         $uploader =  $this->testModel
@@ -39,9 +35,9 @@ class TestUploader extends TestCase
             'content_type' => $ct1,
             'user_id' => $this->user->id,
         ]);
-        // UploadedFile::fake()->create('my_file_22.pdf')->size(456)
+        
 
-        $fakeFile = $this->_getTestFileUploded('my_file_22.pdf');
+        $fakeFile = UploadedFile::fake()->create('my_file_22.pdf')->size(456);
         // $ct2 = $fakeFile->getClientMimeType();
 
         $uploader =  $this->testModel
