@@ -1,4 +1,4 @@
-# laravel-uploader
+# Laravel Uploader
 [![Build Status](https://travis-ci.org/lloricode/laravel-uploader.svg?branch=develop)](https://travis-ci.org/lloricode/laravel-uploader)
 
 ## Install via [composer](https://getcomposer.org/).
