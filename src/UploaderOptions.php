@@ -3,6 +3,7 @@
 namespace Lloricode\LaravelUploader;
 
 use Exception;
+use Illuminate\Support\Facades\Config;
 
 class UploaderOptions
 {
@@ -20,7 +21,7 @@ class UploaderOptions
     public function reset(): self
     {
         $this->fileNamePrefix = 'file';
-        $this->disk = config('filesystems.default');
+        $this->disk = Config::get('filesystems.default');
         $this->maxSize = 20000000;  // 20 mb in byte decimal
         $this->enableDeleteFile = false;
 
@@ -41,7 +42,7 @@ class UploaderOptions
      */
     public function disk(string $disk): self
     {
-        $disks = array_keys(config('filesystems.disks'));
+        $disks = array_keys(Config::get('filesystems.disks'));
 
         throw_if(!in_array($disk, $disks), Exception::class, 'Invalid storage parameter in ' . get_class($this) . '->disk($disk)');
 

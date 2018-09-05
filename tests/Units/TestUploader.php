@@ -5,6 +5,7 @@ namespace Lloricode\LaravelUploader\Tests\Units;
 use Lloricode\LaravelUploader\Tests\TestCase;
 use Lloricode\LaravelUploader\Models\Uploader;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Config;
 
 class TestUploader extends TestCase
 {
@@ -21,7 +22,7 @@ class TestUploader extends TestCase
         $uploader =  $this->testModel
             ->uploadFile($fakeFile);
             
-        $this->assertFileExists(config("filesystems.disks.{$uploader->disk}.root").'/'.$uploader->path);
+        $this->assertFileExists(Config::get("filesystems.disks.{$uploader->disk}.root").'/'.$uploader->path);
 
         $this->assertDatabaseHas((new Uploader)->getTable(), [
             'uploaderable_id' => $this->testModel->id,
