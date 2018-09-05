@@ -15,9 +15,15 @@ class TestUploader extends TestCase
         $this->actingAs($this->user);
     }
 
+    private function _getTestFileUploded($name = 'my_file.pdf')
+    {
+        return new UploadedFile(__DIR__ . '/../files/test.pdf', $name);
+    }
+
     public function testAllDefault()
     {
-        $fakeFile = UploadedFile::fake()->create('my_file.pdf')->size(123);
+        $fakeFile = $this->_getTestFileUploded();
+        $ct1 = $fakeFile->getClientMimeType();
 
         $uploader =  $this->testModel
             ->uploadFile($fakeFile);
@@ -30,12 +36,13 @@ class TestUploader extends TestCase
             'client_original_name' => 'my_file.pdf',
             'extension' => 'pdf',
             'disk' => 'local',
-            'content_type' => 'application/pdf',
+            'content_type' => $ct1,
             'user_id' => $this->user->id,
         ]);
+        // UploadedFile::fake()->create('my_file_22.pdf')->size(456)
 
-
-        $fakeFile = UploadedFile::fake()->create('my_file_22.pdf')->size(456);
+        $fakeFile = $this->_getTestFileUploded('my_file_22.pdf');
+        // $ct2 = $fakeFile->getClientMimeType();
 
         $uploader =  $this->testModel
             ->uploadFile($fakeFile, 'sample');
@@ -48,7 +55,7 @@ class TestUploader extends TestCase
         $this->assertEquals('my_file.pdf', $uploadedFiles[0]->client_original_name);
         $this->assertNull($uploadedFiles[0]->label);
         $this->assertEquals('pdf', $uploadedFiles[0]->extension);
-        $this->assertEquals('application/pdf', $uploadedFiles[0]->content_type);
+        $this->assertEquals($ct1, $uploadedFiles[0]->content_type);
 
         $this->assertEquals('http://localhost/api/uploaders/1', $uploadedFiles[0]->download_link->api);
         $this->assertEquals('http://localhost/uploaders/1', $uploadedFiles[0]->download_link->web);
