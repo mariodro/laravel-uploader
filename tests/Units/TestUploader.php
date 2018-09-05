@@ -40,8 +40,10 @@ class TestUploader extends TestCase
         $fakeFile = UploadedFile::fake()->create('my_file_22.pdf')->size(456);
         // $ct2 = $fakeFile->getClientMimeType();
 
-        $uploader =  $this->testModel
+        $uploader2 =  $this->testModel
             ->uploadFile($fakeFile, 'sample');
+
+        $this->assertFileExists(Config::get("filesystems.disks.{$uploader2->disk}.root").'/'.$uploader2->path);
 
 
         $uploadedFiles =  $this->testModel->getUploadedFiles();
@@ -63,5 +65,10 @@ class TestUploader extends TestCase
         $this->actingAs($this->user, 'api');
         $this->get($uploadedFiles[0]->download_link->api)
                 ->assertStatus(200);
+
+        $this->testModel->delete();
+
+        $this->assertFileNotExists(Config::get("filesystems.disks.{$uploader->disk}.root").'/'.$uploader->path);
+        $this->assertFileNotExists(Config::get("filesystems.disks.{$uploader2->disk}.root").'/'.$uploader2->path);
     }
 }
