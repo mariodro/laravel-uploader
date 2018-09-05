@@ -48,9 +48,13 @@ class TestUploader extends TestCase
         $this->assertNull($uploadedFiles[0]->label);
         $this->assertEquals('pdf', $uploadedFiles[0]->extension);
         $this->assertEquals('application/pdf', $uploadedFiles[0]->content_type);
-        $this->assertEquals('http://localhost/uploaders/1', $uploadedFiles[0]->download_link);
 
-        $this->get($uploadedFiles[0]->download_link)
+        $this->assertEquals('http://localhost/api/uploaders/1', $uploadedFiles[0]->download_link->api);
+        $this->assertEquals('http://localhost/uploaders/1', $uploadedFiles[0]->download_link->web);
+
+        $this->get($uploadedFiles[0]->download_link->web)
             ->assertOk();
+        $this->get($uploadedFiles[0]->download_link->api)
+                ->assertOk();
     }
 }

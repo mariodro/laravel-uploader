@@ -44,7 +44,10 @@ trait UploaderTrait
                 'extension' => $uploader->extension,
                 'disk' => $uploader->disk,
                 'content_type' => $uploader->content_type,
-                'download_link' => route('uploader.download', $uploader),
+                'download_link' => (object)[
+                    'web' => route('lloricode.web.uploader.download', $uploader),
+                    'api' => route('lloricode.api.uploader.download', $uploader),
+                ],
                 'readable_size' => formatBytesUnits($uploader->bytes),
 
                 'created_at' => $uploader->created_at->format('F d, Y g:ia'),

@@ -23,13 +23,19 @@ class LaravelUploaderRouteServiceProvider extends RouteServiceProvider
 
     protected function mapApiRoutes()
     {
+        Route::prefix('api/uploaders')
+            ->middleware('api')
+            ->as('lloricode.api.uploader.')
+            ->namespace($this->namespace)
+            ->group(__DIR__ . '/../resources/routes/api-route.php');
     }
 
     protected function mapWebRoutes()
     {
         Route::prefix('uploaders')
             ->middleware('web')
+            ->as('lloricode.web.uploader.')
             ->namespace($this->namespace)
-            ->group(__DIR__ . '/../web-route.php');
+            ->group(__DIR__ . '/../resources/routes/web-route.php');
     }
 }
