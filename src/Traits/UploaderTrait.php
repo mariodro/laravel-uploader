@@ -3,12 +3,12 @@
 namespace Lloricode\LaravelUploader\Traits;
 
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Lloricode\LaravelUploader\Models\Uploader as Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Lloricode\LaravelUploader\Contract\UploaderContract;
 use Exception;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Config;
 
 trait UploaderTrait
 {
@@ -20,7 +20,7 @@ trait UploaderTrait
      */
     public function uploaders() :MorphMany
     {
-        return $this->morphMany(Model::class, 'uploaderable');
+        return $this->morphMany(Config::get('uploader.implementation', \Lloricode\LaravelUploader\Models\Uploader::class), 'uploaderable');
     }
 
     public function delete()
@@ -54,7 +54,7 @@ trait UploaderTrait
         return $return;
     }
 
-    public function uploadFile(UploadedFile $uploadedFile, $label = null) :Model
+    public function uploadFile(UploadedFile $uploadedFile, $label = null) //:Model
     {
         $modelRules = $this->uploaderRules();
 
@@ -84,6 +84,6 @@ trait UploaderTrait
         // TODO:
         $pathConfig = ''; //config('uploaders.folder_path');
 
-        return Model::PATH_FOLDER . '/' . $pathConfig . $modelClassArray[count($modelClassArray)-1] . '/' . md5($model->id);
+        return Config::get('uploader.implementation', \Lloricode\LaravelUploader\Models\Uploader::class)::PATH_FOLDER . '/' . $pathConfig . $modelClassArray[count($modelClassArray)-1] . '/' . md5($model->id);
     }
 }
