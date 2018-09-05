@@ -54,6 +54,8 @@ class TestUploader extends TestCase
 
         $this->get($uploadedFiles[0]->download_link->web)
             ->assertOk();
+
+        $this->actingAs($this->user, 'api');
         $this->get($uploadedFiles[0]->download_link->api)
                 ->assertOk();
     }
