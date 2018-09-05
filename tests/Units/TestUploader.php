@@ -54,10 +54,10 @@ class TestUploader extends TestCase
         $this->assertEquals('http://localhost/uploaders/1', $uploadedFiles[0]->download_link->web);
 
         $this->get($uploadedFiles[0]->download_link->web)
-            ->assertOk();
+            ->assertStatus(200);
 
         $this->actingAs($this->user, 'api');
         $this->get($uploadedFiles[0]->download_link->api)
-                ->assertOk();
+                ->assertStatus(200);
     }
 }
