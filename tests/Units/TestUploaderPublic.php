@@ -7,7 +7,7 @@ use Lloricode\LaravelUploader\Models\Uploader;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Config;
 
-class TestUploader extends TestCase
+class TestUploaderPublic extends TestCase
 {
     public function setUp()
     {
@@ -21,17 +21,17 @@ class TestUploader extends TestCase
         $fakeFile = UploadedFile::fake()->create('my_file.pdf')->size(123);
         $ct1 = $fakeFile->getClientMimeType();
 
-        $uploader =  $this->testModel
+        $uploader =  $this->testPublicModel
             ->uploadFile($fakeFile);
             
         $this->assertFileExists(Config::get("filesystems.disks.{$uploader->disk}.root").'/'.$uploader->path);
 
         $this->assertDatabaseHas((new Uploader)->getTable(), [
-            'uploaderable_id' => $this->testModel->id,
-            'uploaderable_type' => get_class($this->testModel),
+            'uploaderable_id' => $this->testPublicModel->id,
+            'uploaderable_type' => get_class($this->testPublicModel),
             'client_original_name' => 'my_file.pdf',
             'extension' => 'pdf',
-            'disk' => 'local',
+            'disk' => 'public',
             'content_type' => $ct1,
             'user_id' => $this->user->id,
         ]);
@@ -40,17 +40,17 @@ class TestUploader extends TestCase
         $fakeFile = UploadedFile::fake()->create('my_file_22.pdf')->size(456);
         // $ct2 = $fakeFile->getClientMimeType();
 
-        $uploader2 =  $this->testModel
+        $uploader2 =  $this->testPublicModel
             ->uploadFile($fakeFile, 'sample');
 
         $this->assertFileExists(Config::get("filesystems.disks.{$uploader2->disk}.root").'/'.$uploader2->path);
 
 
-        $uploadedFiles =  $this->testModel->getUploadedFiles();
+        $uploadedFiles =  $this->testPublicModel->getUploadedFiles();
 
         $this->assertCount(2, $uploadedFiles);
 
-        $this->assertFalse(isset($uploadedFiles[0]->public_path));
+        $this->assertNotNull($uploadedFiles[0]->public_path);
 
         $this->assertEquals('my_file.pdf', $uploadedFiles[0]->client_original_name);
         $this->assertNotNull($uploadedFiles[0]->path);
@@ -68,7 +68,7 @@ class TestUploader extends TestCase
         $this->get($uploadedFiles[0]->download_link->api)
                 ->assertStatus(200);
 
-        $this->testModel->delete();
+        $this->testPublicModel->delete();
 
         $this->assertFileNotExists(Config::get("filesystems.disks.{$uploader->disk}.root").'/'.$uploader->path);
         $this->assertFileNotExists(Config::get("filesystems.disks.{$uploader2->disk}.root").'/'.$uploader2->path);

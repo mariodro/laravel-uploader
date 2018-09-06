@@ -25,7 +25,7 @@ class LaravelUploaderRouteServiceProvider extends RouteServiceProvider
     {
         Route::prefix('api/uploaders')
             ->middleware('api')
-            ->as('lloricode.api.uploader.')
+            ->as('uploaders.api.')
             ->namespace($this->namespace)
             ->group(__DIR__ . '/../resources/routes/api-route.php');
     }
@@ -34,7 +34,7 @@ class LaravelUploaderRouteServiceProvider extends RouteServiceProvider
     {
         Route::prefix('uploaders')
             ->middleware('web')
-            ->as('lloricode.web.uploader.')
+            ->as('uploaders.web.')
             ->namespace($this->namespace)
             ->group(__DIR__ . '/../resources/routes/web-route.php');
     }
