@@ -53,7 +53,6 @@ class TestUploader extends TestCase
         $this->assertFalse(isset($uploadedFiles[0]->public_path));
 
         $this->assertEquals('my_file.pdf', $uploadedFiles[0]->client_original_name);
-        $this->assertNotNull($uploadedFiles[0]->path);
         $this->assertNull($uploadedFiles[0]->label);
         $this->assertEquals('pdf', $uploadedFiles[0]->extension);
         $this->assertEquals($ct1, $uploadedFiles[0]->content_type);

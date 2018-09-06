@@ -39,7 +39,6 @@ trait UploaderTrait
         $return = collect([]);
         foreach ($this->uploaders as $uploader) {
             $data = [
-                'path' => $uploader->path,
                 'client_original_name' => $uploader->client_original_name,
                 'label' => $uploader->label,
                 'extension' => $uploader->extension,
@@ -53,6 +52,7 @@ trait UploaderTrait
 
                 'created_at' => $uploader->created_at->format('F d, Y g:ia'),
                 'readable_created_at' => $uploader->created_at->diffForHumans(),
+                'public_path' => null,
             ];
 
             // check disk if visibility is public
