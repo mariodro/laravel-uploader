@@ -6,12 +6,14 @@ use Orchestra\Testbench\TestCase as Orchestra;
 use Lloricode\LaravelUploader\Models\Uploader;
 use Illuminate\Database\Schema\Blueprint;
 use App\Models\TestModel;
+use App\Models\TestPublicModel;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 
 class TestCase extends Orchestra
 {
     protected $testModel;
+    protected $testPublicModel;
     protected $user;
 
     public function setUp()
@@ -63,6 +65,12 @@ class TestCase extends Orchestra
             $table->timestamps();
         });
 
+        $app['db']->connection()->getSchemaBuilder()->create('test_public_models', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->timestamps();
+        });
+
         $app['db']->connection()->getSchemaBuilder()->create('users', function (Blueprint $table) {
             $table->increments('id');
             $table->string('first_name');
@@ -72,6 +80,10 @@ class TestCase extends Orchestra
 
         $this->testModel = TestModel::create([
             'name' => 'test',
+        ]);
+
+        $this->testPublicModel = TestPublicModel::create([
+            'name' => 'test2',
         ]);
 
         $this->user = User::create([

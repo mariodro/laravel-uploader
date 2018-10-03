@@ -38,22 +38,32 @@ trait UploaderTrait
     {
         $return = collect([]);
         foreach ($this->uploaders as $uploader) {
-            $return->push((object)[
-                'path' => $uploader->path,
+            $data = [
                 'client_original_name' => $uploader->client_original_name,
                 'label' => $uploader->label,
                 'extension' => $uploader->extension,
                 'disk' => $uploader->disk,
                 'content_type' => $uploader->content_type,
                 'download_link' => (object)[
-                    'web' => route('lloricode.web.uploader.download', $uploader),
-                    'api' => route('lloricode.api.uploader.download', $uploader),
+                    'web' => $uploader->downloadLink(),
+                    'api' => $uploader->downloadLink('api'),
                 ],
                 'readable_size' => formatBytesUnits($uploader->bytes),
 
                 'created_at' => $uploader->created_at->format('F d, Y g:ia'),
                 'readable_created_at' => $uploader->created_at->diffForHumans(),
-            ]);
+                'public_path' => null,
+            ];
+
+            // check disk if visibility is public
+            $disk = Config::get("filesystems.disks.{$uploader->disk}");
+            if (isset($disk['visibility'])) {
+                if ($disk['visibility'] == 'public') {
+                    $data['public_path'] = $disk['url'] . '/' . $uploader->path;
+                }
+            }
+
+            $return->push((object)$data);
         }
         return $return;
     }
@@ -81,13 +91,10 @@ trait UploaderTrait
 
     private function _storagePath(UploaderContract $model)
     {
-        $modelclass = strtolower(get_class($model));
-
-        $modelClassArray = explode('\\', $modelclass);
-
         // TODO:
         $pathConfig = ''; //config('uploaders.folder_path');
 
-        return Config::get('uploader.implementation', \Lloricode\LaravelUploader\Models\Uploader::class)::PATH_FOLDER . '/' . $pathConfig . $modelClassArray[count($modelClassArray)-1] . '/' . md5($model->id);
+        return Config::get('uploader.implementation', \Lloricode\LaravelUploader\Models\Uploader::class)::PATH_FOLDER . '/' .
+         $pathConfig . kebab_case(class_basename($model)) . '/' . md5($model->id);
     }
 }

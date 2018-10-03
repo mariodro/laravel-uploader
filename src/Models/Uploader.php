@@ -48,4 +48,9 @@ class Uploader extends Model
 
         parent::delete();
     }
+
+    public function downloadLink($route = 'web')
+    {
+        return route("uploaders.$route.download", $this);
+    }
 }
