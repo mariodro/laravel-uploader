@@ -24,4 +24,11 @@ class UploaderController extends Controller
             ]
         );
     }
+
+    public function delete($uploader)
+    {
+        $uploader = Config::get('uploader.implementation', \Lloricode\LaravelUploader\Models\Uploader::class)::findOrFail($uploader);
+        $uploader->delete();
+        return response()->json([], 204);
+    }
 }
