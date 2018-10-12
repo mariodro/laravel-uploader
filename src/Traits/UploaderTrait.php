@@ -81,7 +81,7 @@ trait UploaderTrait
             'client_original_name' => $uploadedFile->getClientOriginalName(),
             'label' => $label,
             'user_id' => app()->runningInConsole() ? 1 : auth()->user()->id,
-            'content_type' => $uploadedFile->getClientMimeType(),
+            'content_type' => $uploadedFile->getMimeType(),
             'extension' => $uploadedFile->getClientOriginalExtension(),
             'path' => $pathToSave,
             'disk' => $modelRules->disk,
