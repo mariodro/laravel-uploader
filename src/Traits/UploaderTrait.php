@@ -85,7 +85,7 @@ trait UploaderTrait
             'extension' => $uploadedFile->getClientOriginalExtension(),
             'path' => $pathToSave,
             'disk' => $modelRules->disk,
-            'bytes' => $uploadedFile->getClientSize(),
+            'bytes' => $uploadedFile->getClientSize() ?: 0,
         ]);
     }
 
