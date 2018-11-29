@@ -80,7 +80,7 @@ trait UploaderTrait
         return $this->uploaders()->create([
             'client_original_name' => $uploadedFile->getClientOriginalName(),
             'label' => $label,
-            'user_id' => app()->runningInConsole() ? 1 : auth()->user()->id,
+            'user_id' => app()->runningInConsole() ? 1 : (auth()->check() ? auth()->user()->id : 1),
             'content_type' => $uploadedFile->getMimeType(),
             'extension' => $uploadedFile->getClientOriginalExtension(),
             'path' => $pathToSave,
