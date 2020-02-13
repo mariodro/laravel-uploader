@@ -93,8 +93,11 @@ trait UploaderTrait
     {
         // TODO:
         $pathConfig = ''; //config('uploaders.folder_path');
-
+        
+        //kebab_case is removed in laravel 5.7
+        $className = function_exists('kebab_case') ? kebab_case(class_basename($model)) : \Illuminate\Support\Str::kebab(class_basename($model));
+        
         return Config::get('uploader.implementation', \Lloricode\LaravelUploader\Models\Uploader::class)::PATH_FOLDER . '/' .
-         $pathConfig . kebab_case(class_basename($model)) . '/' . md5($model->id);
+         $pathConfig . $className . '/' . md5($model->id);
     }
 }
